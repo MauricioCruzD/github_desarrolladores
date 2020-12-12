@@ -1,0 +1,22 @@
+CREATE view Vlab_Esta_ordenes as
+
+select * from lab_ordenes_2007
+where usu_borrado=''
+union all
+select * from lab_ordenes_2008
+where usu_borrado=''
+union all
+select * from lab_ordenes_2009
+where usu_borrado=''
+union all
+select * from lab_ordenes_2010
+where usu_borrado=''
+union all
+select * from lab_ordenes_2011
+where usu_borrado=''
+union all
+select * from lab_ordenes_2012
+where usu_borrado=''
+
+
+

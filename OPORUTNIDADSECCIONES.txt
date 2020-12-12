@@ -1,0 +1,11 @@
+Create view Oportunidad_Secciones as
+Select d.year_orden as Orden,h.hc as Historia, h.nombre as Nombres, h.apellido as Apellidos,s.secnombre,
+AVG(DATEDIFF(n,fecha,dbo.funcDateVacio(fec_resultado,Getdate()))) AS Minutos_Resultado,
+AVG(DATEDIFF(n,dbo.funcDateVacio(fec_resultado,Getdate()),dbo.funcDateVacio(fec_valida,Getdate()))) AS Minutos_Validacion,
+AVG(DATEDIFF(n,dbo.funcDateVacio(fec_valida,Getdate()),dbo.funcDateVacio(fec_impreso,Getdate()))) AS Minutos_Impresion
+From  Vlab_esta_diario As d, lab_historias As h, lab_secciones As s, lab_examenes as e
+Where d.hc=h.hc and d.exacodigo>999 
+and d.exacodigo=e.exacodigo and e.seccodigo=s.seccodigo 
+Group by d.year_orden, h.hc, h.nombre, h.apellido,s.secnombre
+--order by year_orden
+

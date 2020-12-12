@@ -1,0 +1,26 @@
+
+
+
+CREATE    View Oportunidad_Paciente As
+Select  d.year_orden,h.hc, h.nombre, h.apellido,
+CASE  WHEN MAX(DATEDIFF(n,fec_ingreso,fecha))<=10 or MAX(DATEDIFF(n,fec_ingreso,fec_resultado))<=600
+THEN AVG(DATEDIFF(n,fec_ingreso,dbo.funcDateVacio(fec_resultado,Getdate()))) --AS Minutos_Resultado
+--(DATEADD(mi, -datepart(mi,(fecha)), DATEADD(hh, -datepart(hh,fecha)+7, fecha)))
+ELSE AVG(DATEDIFF(n,(DATEADD(mi, -datepart(mi,(fecha)), DATEADD(hh, -datepart(hh,fecha)+7, fecha))),dbo.funcDateVacio(fec_resultado,Getdate()))) END Minutos_Resultado,
+CASE MIN(d.fec_resultado) WHEN '01/01/1900' THEN 'Algún Examen Sin Resultado'
+ELSE 'Resultados Completos' END Resultado,
+AVG(DATEDIFF(n,dbo.funcDateVacio(fec_resultado,Getdate()),dbo.funcDateVacio(fec_valida,Getdate()))) AS Minutos_Validacion,
+CASE MIN(d.fec_valida) WHEN '01/01/1900' THEN 'Algún Examen No Validado'
+ELSE 'Validacion Completa' END Validado,
+AVG(DATEDIFF(n,dbo.funcDateVacio(fec_valida,Getdate()),dbo.funcDateVacio(fec_impreso,Getdate()))) AS Minutos_Impresion,
+CASE MIN(d.fec_impreso) WHEN '01/01/1900' THEN 'Algún Examen No Impreso'
+ELSE 'Impresion Completa' END Impreso--le.nombre as Centro,
+--CASE o.tipo_orden WHEN 1 THEN 'Rutina' ELSE 'Urgencia' END 'Tipo de Orden'
+From  Vlab_esta_diario As d, lab_historias As h, lab_examenes as e
+--Vlab_esta_ordenes as o, l_centros as le
+Where d.hc=h.hc and d.exacodigo>999 and d.exacodigo=e.exacodigo and e.seccodigo!=7
+--and d.year_orden= 200902095999 --and d.year_orden<= 200806040100
+and d.resultado!='NIP' and d.exacodigo!=2024 and d.exacodigo!=9003--- and o.orden1=le.codigo
+Group by d.year_orden, h.hc, h.nombre, h.apellido--,le.nombre,o.tipo_orden
+--order By d.year_orden
+

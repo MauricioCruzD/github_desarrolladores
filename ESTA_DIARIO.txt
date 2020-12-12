@@ -1,0 +1,18 @@
+create view Vlab_esta_diario as
+
+select * from lab_historico_2007
+union all
+select * from lab_historico_2008
+union all
+select * from lab_historico_2009
+union all
+select * from lab_historico_2010
+union all
+select * from lab_historico_2011
+union all
+select * from lab_historico_2012
+union all
+select * from lab_diario
+
+
+
